@@ -1,5 +1,6 @@
 import random
 import entity
+import game_objects
 
 
 room_names = [
@@ -46,6 +47,7 @@ class Room:
         self.name = name
         self.content = content
         self.enemies = []
+        self.treasure = []
         self.position = 0
 
     def __str__(self):
@@ -56,6 +58,7 @@ class Room:
                 f"Name: {self.name}, "
                 f"Content: {self.content}, "
                 f"Enemies: {self.enemies}, "
+                f"Treasure: {self.treasure}, "
                 f"Position: {self.position}"
                 f"_________________________________")
 
@@ -85,8 +88,12 @@ def get_rooms_with_enemies(rooms):
     return rooms_to_populate
 
 
-def get_rooms_with_treasure():
-    pass
+def get_rooms_with_treasure(rooms):
+    rooms_to_fill = []
+    for room in rooms:
+        if room.content == "Treasure":
+            rooms_to_fill.append(room)
+    return rooms_to_fill
 
 
 def populate_rooms_with_monsters(overall_rooms):
@@ -101,4 +108,13 @@ def populate_rooms_with_monsters(overall_rooms):
     return overall_rooms
 
 
-#test
+def fill_rooms_with_treasure(overall_rooms):
+    rooms_to_fill = get_rooms_with_treasure(overall_rooms)
+    treasure_list = []
+    for _ in rooms_to_fill:
+        game_objects.create_treasure(game_objects.treasure_names, treasure_list)
+    for room in rooms_to_fill:
+        if treasure_list:
+            random_treasure = random.choice(treasure_list)
+            room.treasure = random_treasure
+    return overall_rooms
